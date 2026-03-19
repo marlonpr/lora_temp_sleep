@@ -1,7 +1,7 @@
 {
     "version":            "1.2",
     "project_name":       "app-template",
-    "project_version":    "1",
+    "project_version":    "d3dff86-dirty",
     "project_path":       "C:/Users/Marlon/workspace/lora_temp_sleep",
     "idf_path":           "C:/esp/esp-idf-v5.5",
     "build_dir":          "C:/Users/Marlon/workspace/lora_temp_sleep/build",

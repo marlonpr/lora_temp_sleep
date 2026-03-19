@@ -27,7 +27,17 @@ RTC_DATA_ATTR uint32_t tx_counter = 0;
 
 static ds18b20_t sensor;
 static volatile int16_t current_temp = 0;
-static volatile bool temp_valid = false;
+
+
+
+
+
+//static volatile bool temp_valid = false;  
+
+RTC_DATA_ATTR bool temp_valid = false;
+
+
+
 //static uint32_t tx_counter = 0;
 
 // ---------------- WDT INIT ----------------
@@ -203,9 +213,14 @@ static void lora_task(void *arg)
 
 
 
+//RTC_DATA_ATTR bool temp_valid = false;  ======== AT TOP========
+
 
 RTC_DATA_ATTR uint8_t wake_stage = 0;
 RTC_DATA_ATTR int16_t last_temp = 0;
+
+
+
 
 #define DS18B20_CONV_TIME_US   200000ULL        // 200 ms conversion 200000ULL
 #define TX_INTERVAL_US         (10ULL * 1000000ULL)  // 30 seconds 30ULL
@@ -230,7 +245,7 @@ void app_main(void)
     lora_hw_init();
 
     //---------------------------------
-    // Verify radio
+    // Verify radio (fast check)
     //---------------------------------
     if (lora_read_reg(REG_VERSION) != 0x12)
     {
@@ -250,35 +265,49 @@ void app_main(void)
 
         wake_stage = 1;
 
+        // 10-bit conversion ≈187 ms
         esp_sleep_enable_timer_wakeup(200000ULL);
         esp_deep_sleep_start();
+    }
 
-    }else
     //---------------------------------
-    // STAGE 1 — transmit
-    //---------------------------------	
-	{
-	    if (ds18b20_read_temperature_nonblocking(
-	            &sensor, &last_temp) == ESP_OK)
-	    {
-	        lora_wake_fast();
-	
-	        current_temp = last_temp;
-	        send_packet();
-	
-	        lora_sleep();
-	    }
-	
-	    wake_stage = 0;
-	
-	    // ⭐ NEW
-	    lora_shutdown();
-	
-	    esp_sleep_enable_timer_wakeup(TX_INTERVAL_US);
-	    esp_deep_sleep_start();
-	}
-}
+    // STAGE 1 — read + transmit
+    //---------------------------------
+    else
+    {
+        if (ds18b20_read_temperature_nonblocking(&sensor,
+                                                 &last_temp) == ESP_OK)
+        {
+            //-------------------------------------------------
+            // Ignore first power-up reading (85°C issue)
+            //-------------------------------------------------
+            if (!temp_valid)
+            {
+                ESP_LOGW(TAG, "Discard first temperature");
+                temp_valid = true;
+            }
+            else
+            {
+                lora_wake_fast();
 
+                current_temp = last_temp;
+                send_packet();
+
+                lora_sleep();
+
+                ESP_LOGI(TAG, "TX temp=%dC", last_temp);
+            }
+        }
+
+        wake_stage = 0;
+
+        // Power down SPI + radio IOs
+        lora_shutdown();
+
+        esp_sleep_enable_timer_wakeup(TX_INTERVAL_US);
+        esp_deep_sleep_start();
+    }
+}
 
 
 //==================== working v2 ==============================================
