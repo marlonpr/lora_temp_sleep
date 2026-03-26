@@ -141,7 +141,8 @@ esp_err_t ds18b20_read_temperature_nonblocking(ds18b20_t *sensor, int16_t *temp)
 
     uint8_t lsb = ds18b20_read_byte(sensor);
     uint8_t msb = ds18b20_read_byte(sensor);
-    *temp = ((msb << 8) | lsb) >> 4;
+    //*temp = ((msb << 8) | lsb) >> 4;
+	*temp = ((int16_t)((msb << 8) | lsb)) >> 4;
     return ESP_OK;
 }
 

@@ -22,6 +22,8 @@ $<TARGET_FILE:__idf_vfs>
 $<TARGET_FILE:__idf_esp_driver_uart>
 $<TARGET_FILE:__idf_esp_ringbuf>
 $<TARGET_FILE:__idf_esp_mm>
+$<TARGET_FILE:__idf_esp_psram>
+$<TARGET_FILE:__idf_esp_driver_spi>
 $<TARGET_FILE:idf::vfs>
 $<TARGET_FILE:__idf_esp_vfs_console>
 $<TARGET_FILE:mbedtls>
@@ -39,7 +41,6 @@ $<TARGET_FILE:__idf_esp_gdbstub>
 $<TARGET_FILE:__idf_driver>
 $<TARGET_FILE:__idf_esp_driver_pcnt>
 $<TARGET_FILE:__idf_esp_driver_gptimer>
-$<TARGET_FILE:__idf_esp_driver_spi>
 $<TARGET_FILE:__idf_esp_driver_mcpwm>
 $<TARGET_FILE:__idf_esp_driver_i2s>
 $<TARGET_FILE:__idf_esp_driver_sdmmc>
@@ -94,6 +95,8 @@ $<TARGET_FILE:idf::cxx>
 $<TARGET_FILE:idf::esp_timer>
 $<TARGET_FILE:idf::esp_driver_gptimer>
 $<TARGET_FILE:idf::esp_ringbuf>
+$<TARGET_FILE:idf::esp_driver_spi>
+$<TARGET_FILE:idf::esp_psram>
 $<TARGET_FILE:idf::esp_driver_uart>
 $<TARGET_FILE:idf::app_trace>
 $<TARGET_FILE:idf::esp_event>
@@ -105,7 +108,6 @@ $<TARGET_FILE:idf::esp_netif>
 $<TARGET_FILE:idf::wpa_supplicant>
 $<TARGET_FILE:idf::esp_coex>
 $<TARGET_FILE:idf::esp_wifi>
-$<TARGET_FILE:idf::esp_driver_spi>
 $<TARGET_FILE:idf::esp_gdbstub>
 $<TARGET_FILE:idf::unity>
 $<TARGET_FILE:idf::cmock>

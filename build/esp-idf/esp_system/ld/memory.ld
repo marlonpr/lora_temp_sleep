@@ -23,7 +23,7 @@
 
  * Automatically generated file. DO NOT EDIT.
 
- * Espressif IoT Development Framework (ESP-IDF) 5.5.0 Configuration Header
+ * Espressif IoT Development Framework (ESP-IDF) 5.5.3 Configuration Header
 
  */
        
@@ -34,6 +34,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 /* CPU instruction prefetch padding size for flash mmap scenario */
+/* Copy from esp_secure_boot.h */
 /*
  * PMP region granularity size
  * Software may determine the PMP granularity by writing zero to pmp0cfg, then writing all ones
@@ -99,7 +100,7 @@ MEMORY
   */
   rtc_slow_reserved_seg(RW) : org = 0x50000000 + 0x2000 - ((24)), len = ((24))
   /* external memory */
-  extern_ram_seg(RWX) : org = 0x3F800000,
+  extern_ram_seg(RW) : org = 0x3F800000,
                                      len = 0x400000
 }
 _heap_start = _heap_low_start;

@@ -123,7 +123,11 @@ void temp_task(void *arg) {
 // ---------------- LORA TX ----------------
 static void send_packet(void)
 {
-    int16_t temp = current_temp;
+    
+	if (current_temp < -9)
+	    current_temp = -9;
+	
+	int16_t temp = current_temp;
 
     uint8_t buf[8] = {
         0xAA,
